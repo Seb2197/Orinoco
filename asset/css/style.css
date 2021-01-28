@@ -1,0 +1,79 @@
+body {
+  font-family: "Source Code Pro", monospace, sans-serif;
+  background-color: #efd297;
+}
+.wrap {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+a {
+  text-decoration: none;
+  color: black;
+}
+.global {
+  display: flex;
+  justify-content: space-between;
+}
+.nav {
+  margin-top: 50px;
+}
+.nav ul {
+  display: flex;
+}
+.nav a {
+  margin: 0 20px;
+  padding: 10px;
+}
+.nav a:hover {
+  color: white;
+  background-color: grey;
+  border-radius: 10px;
+}
+/* fin du header */
+
+/* début de la section */
+.global-section {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.global-produit {
+  margin-top: 80px;
+  padding: 40px 40px;
+}
+.global-produit:hover {
+  opacity: 0.7;
+}
+.global-price {
+  padding: 10px 15px;
+  font-weight: bold;
+}
+.global-fond {
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 7px 7px 15px 0px rgba(50, 50, 50, 0.75);
+}
+.global-fond img {
+  border-radius: 10px 10px 0 0;
+  width: 100%;
+}
+.global-title{
+    margin-top: 80px;
+    text-align: center;
+    font-size: 26px;
+    font-weight: bold;
+}
+.global-description {
+  padding: 10px 15px;
+}
+/* Fin de la section */
+/* Début du footer */
+footer {
+  background-color: #dfa52d;
+  color: white;
+  padding: 40px;
+  text-align: center;
+  border-radius: 10px 10px 0 0;
+  margin-top: 90px;
+}
