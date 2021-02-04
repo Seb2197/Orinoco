@@ -40,14 +40,14 @@ a {
 }
 .global-produit {
   margin-top: 80px;
-  padding: 40px 40px;
+  padding:  0 40px;
 }
 .global-produit:hover {
   opacity: 0.7;
 }
-.global-price {
-  padding: 10px 15px;
-  font-weight: bold;
+.global-description{
+  padding: 10px 15px 30px 15px;
+  border-top: 2px solid orange;
 }
 .global-fond {
   background-color: #fff;
@@ -63,9 +63,6 @@ a {
     text-align: center;
     font-size: 26px;
     font-weight: bold;
-}
-.global-description {
-  padding: 10px 15px;
 }
 /* Fin de la section */
 /* Début du footer */
