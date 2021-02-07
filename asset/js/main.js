@@ -1,26 +1,35 @@
-var descriptionglobal = document.querySelector(".description-global");
-var description = document.querySelector(".description");
-var global = document.querySelector(".global");
-var peluche1 = document.querySelector(".peluche1");
-var peluche2 = document.querySelector(".peluche2");
-var peluche3 = document.querySelector(".peluche3");
+// var request = new XMLHttpRequest();
+// request.onreadystatechange = function () {
+//   if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
+//     var response = JSON.parse(this.responseText);
+//   }
+// };
+// request.open(
+//   "GET",
+//   `http://localhost:3000/api/teddies`
+// );
+// console.log(request);
+// request.send();
 
-var request = new XMLHttpRequest();
-request.onreadystatechange = function () {
-  if (this.readyState == XMLHttpRequest.DONE && this.status == 200) {
-    var response = JSON.parse(this.responseText);
-    descriptionglobal.innerText = `${response[0].name}`;
-    description.innerText = `${response[0].price}€`;
-    global.innerText = `${response[0].description}`;
-    peluche1.innerText = `${response[2].name}`;
-    peluche2.innerText = `${response[2].price}€`;
-    peluche3.innerText = `${response[0].description}`;
-  }
-};
-request.open("GET", "http://localhost:3000/api/teddies");
-request.send();
+const page = document.querySelector("#globalCard");
 
+fetch("http://localhost:3000/api/teddies")
+  .then(async (resultat) => {
+    const results = await resultat.json();
+    results.forEach((teddie) => {
+      teddiesCard(teddie);
+    });
+  })
 
-// var test = document.querySelector(".global-fond");
+  .catch((error) => {
+    console.log(error);
+  });
 
-// test.innerHTML = ('hello wolrd');
+function teddiesCard(teddie) {
+  page.innerHTML += `   <div class="globalCard">
+                        <img src="${teddie.imageUrl}" alt="Ourson">
+                        <p class="global-description">Nom: ${teddie.name}</p>
+                        <p class="global-description">Prix: ${teddie.price}</p>
+                        <p class="global-description">${teddie.description}</p>
+                        </div>`;
+}

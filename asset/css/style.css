@@ -33,11 +33,6 @@ a {
 /* fin du header */
 
 /* début de la section */
-.global-section {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-}
 .global-produit {
   margin-top: 80px;
   padding:  0 40px;
@@ -49,20 +44,46 @@ a {
   padding: 10px 15px 30px 15px;
   border-top: 2px solid orange;
 }
-.global-fond {
-  background-color: #fff;
-  border-radius: 10px;
-  box-shadow: 7px 7px 15px 0px rgba(50, 50, 50, 0.75);
+.global-fond{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  margin: 0 auto;
 }
 .global-fond img {
   border-radius: 10px 10px 0 0;
   width: 100%;
+  height: 300px;
+  object-fit: cover;
 }
 .global-title{
     margin-top: 80px;
     text-align: center;
     font-size: 26px;
     font-weight: bold;
+}
+.globalCard{
+  margin-bottom: 20px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 7px 7px 15px 0px rgba(50, 50, 50, 0.75);
+  cursor: pointer;
+  width: 30%;
+  margin: 100px 20px;
+}
+.global-fond img:hover{
+  opacity: .7;
+  background-color: orange;
+}
+@media screen and (max-width: 768px){
+  .globalCard{
+    width: 100%;
+  }
+}
+@media screen and (max-width: 425px){
+  .globalCard{
+    width: 100%;
+  }
 }
 /* Fin de la section */
 /* Début du footer */
