@@ -1,4 +1,12 @@
 const page = document.querySelector("#globalCard");
+const panierTotal = document.querySelector("#panierTotal");
+let productTotal = 0;
+if (localStorage.getItem("productSave") === null) {
+  productTotal = 0;
+} else {
+  productTotal = localStorage.getItem("productSave");
+}
+panierTotal.textContent = productTotal;
 fetch("http://localhost:3000/api/teddies/")
   .then(async (resultat) => {
     const results = await resultat.json();
@@ -6,7 +14,7 @@ fetch("http://localhost:3000/api/teddies/")
       teddiesCard(teddie);
     });
   })
-
+  
   .catch((error) => {
     console.log(error);
   });

@@ -99,9 +99,6 @@ nav,
 section {
   display: block;
 }
-body {
-  line-height: 1;
-}
 ol,
 ul {
   list-style: none;
@@ -165,11 +162,17 @@ a {
 .nav a {
   margin: 0 20px;
   padding: 10px;
+  transition: all 0.2s ease-in-out;
 }
 .nav a:hover {
   color: white;
   background-color: grey;
   border-radius: 10px;
+}
+.panierTotal{
+  border: 2px solid orange;
+  border-radius: 10px;
+  padding: 0 10px;
 }
 /* fin du header */
 
@@ -182,7 +185,8 @@ a {
   opacity: 0.7;
 }
 .global-description {
-  padding: 10px 15px 30px 15px;
+  text-align: center;
+  padding: 24px 15px 24px 15px;
   border-top: 2px solid orange;
 }
 .global-fond {
@@ -220,15 +224,33 @@ a {
 .globalSelect select {
   width: 50%;
   margin: 0 auto;
+  margin-bottom: 90px;
   display: block;
   border: 2px solid orange;
   outline: none;
   border-radius: 5px;
   font-family: "Source Code Pro", monospace, sans-serif;
+  font-size: 17px;
 }
 .globalH2Select {
   text-align: center;
   padding: 10px 0 20px 0;
+}
+.selectBtn {
+  width: 50%;
+  margin: 0 auto;
+  display: block;
+  border: 2px solid orange;
+  outline: none;
+  border-radius: 5px;
+  text-align: center;
+  padding: 5px 10px;
+  font-size: 14px;
+  transition: all .2s ease-in-out;
+}
+.selectBtn:hover{
+  color: #fff;
+  background: orange;
 }
 @media screen and (max-width: 768px) {
   .globalCard {
