@@ -71,7 +71,7 @@ function teddieDesc() {
       globalPrice.textContent = `${(teddie.price / 100) * productCount}€`;
      panierTotal.textContent = productTotal;
     } else {
-      alert("Vous ne pouvez pas ajouter plus de 6 produits !");
+      alert("Vous ne pouvez pas ajouter plus de 6 produits ");
     }
   });
 }
