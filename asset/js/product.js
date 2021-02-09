@@ -1,77 +1,119 @@
-//On récupère l'id de nos cartes de notre html
-const productDesc = document.querySelector("#globalCard");
-// On déclare notre variable teddies pour les fonctions
-let teddie;
-const params = new URL(document.location).searchParams;
-const id = params.get("id");
-// On déclare nos éléments pour le panier et le price
-let productCount = 0;
-let productTotal = 0;
-let productConvert;
-let productConvertJSon;
-if (localStorage.getItem("productSave") === null) {
-  productTotal = 0;
-} else {
-  productTotal = localStorage.getItem("productSave");
+// On fais une fonction pour récupérer les paramètre de l'id
+function getProductIDFromUrl() {
+  const params = new URL(document.location).searchParams;
+  return params.get("id");
 }
-productConvert = `{"id":-1,"count":-1}`;
-productConvertJSon = JSON.parse(productConvert);
-console.log(productConvertJSon);
-const panierTotal = document.querySelector("#panierTotal");
-panierTotal.textContent = productTotal;
 
-fetch("http://localhost:3000/api/teddies/" + id)
-  .then(async (resultat) => {
-    const result = await resultat.json();
-    teddie = result;
-    productConvertJSon.id = teddie.id;
-    teddieDesc();
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+// On récupère l'id de notre api avec une verification en cas d'erreur
+async function getProduct(id) {
+  const url = "http://localhost:3000/api/teddies/" + id;  
+  const response = await fetch(url);
+  if (!response.ok) {
+    const msg = `Une erreur est survenue : ${response.status} = ${response.statusText}`;
+    throw new Error(msg);
+  }
+  let result = await response.json();    
+  return result;        
+}
 
-function teddieDesc() {
-  colorsOurs = teddie.colors;
-  var global = ` <div class="globalCard">
-                          <img src="${teddie.imageUrl}" alt="Ourson">
-                          <p class="global-description">Nom: ${teddie.name}</p>
-                          <p class="global-description">Prix: <span id="globalPrice">${
-                            teddie.price / 100
-                          }€</span></p>
-                          <p class="global-description">${
-                            teddie.description
-                          }</p>
+
+// On ajoute une fonction qui permet d'avoir la valeur de la totalité des éléments dans notre product.html
+function updatePanierTotal() {
+  if (localStorage.getItem('cart') != null) {
+    const items = JSON.parse(localStorage.getItem('cart'));
+    const panierTotal = document.querySelector("#panierTotal");
+    let total = 0;
+    
+    for (let i=0; (i < items.length); i++) {
+      total += items[i].quantity;
+    }
+    
+    panierTotal.textContent = total;
+  }
+}
+
+// On ajoute les éléments sélectionner dans le localStorage dans un tableau et avec les quantité de chaque produit sélectionner.
+function addProductToCart(item) {
+
+  let items = [];
+  let tempItem = {
+    id: item._id,
+    quantity:1,
+    color: item.color
+  };
+ 
+  
+  let newItem = true;
+
+  if (localStorage.getItem('cart') === null) {
+    items.push(tempItem);
+    localStorage.setItem('cart', JSON.stringify(items));   
+    updatePanierTotal(items.length);
+  } 
+  else {
+    items = JSON.parse(localStorage.getItem('cart'));
+    console.log(items);
+    //items.forEach((prod) => {
+    for (let i=0; (i < items.length); i++) {
+      if (item.id === items[i]._id && item.color === items[i].color) { 
+        items[i].quantity++; 
+        newItem = false;
+      }
+    }
+
+    if (newItem) { items.push(tempItem); }
+    localStorage.setItem('cart', JSON.stringify(items));
+  }
+
+  updatePanierTotal();
+}
+
+
+function displayProduct(product) {
+  console.log("DisplayProduct");  
+  let colors = product.colors;
+  let productItem = {
+    _id: product._id,
+    quantity:1,
+    color: ""
+  };
+
+  let productCard = ` <div class="globalCard">
+                          <img src="${product.imageUrl}" alt="Ourson">
+                          <p class="global-description">Nom: ${product.name}</p>
+                          <p class="global-description">Prix: <span id="globalPrice">${product.price / 100}€</span></p>
+                          <p class="global-description">${product.description}</p>
                           <div class="globalSelect">
                           <h2 class="globalH2Select">Choisis ta couleur</h2>
-                          <select>`;
-
-  for (let i = 0; i < colorsOurs.length; i++) {
-    global += `<option value="${teddie.colors[i]}">${teddie.colors[i]}</option>`;
+                          <select id="globalColor">`;  
+  for (let i = 0; (i < colors.length); i++) {
+    productCard += `<option value="${colors[i]}">${colors[i]}</option>`;
   }
-  global += `</select><a id="selectBtn" class="selectBtn" href="#">Ajouter au panier</a></div></div>`;
-  productDesc.innerHTML += global;
+  productCard += `</select><a id="BtnAdd" class="BtnAdd" href="#">Ajouter au panier</a></div></div>`;
 
-  //Panier
+  const productContainer = document.querySelector("#globalCard");
+  productContainer.innerHTML += productCard;
 
-  const selectBtn = document.querySelector("#selectBtn");
-  const globalPrice = document.querySelector("#globalPrice");
+  const selectBtn = document.querySelector("#BtnAdd");
   selectBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    if (productCount < 6) {
-      productCount++;
-      if ((productCount = 1)) {
-        productTotal++;
-        localStorage.setItem("productSave", productTotal.toString());
-      }
-      productConvertJSon.count = productCount;
-      let temp = JSON.stringify(productConvertJSon);
-      let quiname = `productDetail_${productTotal}`;
-      localStorage.setItem(quiname, temp);
-      globalPrice.textContent = `${(teddie.price / 100) * productCount}€`;
-     panierTotal.textContent = productTotal;
-    } else {
-      alert("Vous ne pouvez pas ajouter plus de 6 produits ");
-    }
+    let select = document.getElementById("globalColor");
+    productItem.color = select.options[select.selectedIndex].value;
+    addProductToCart(productItem);
   });
 }
+
+async function productRun() {    
+  updatePanierTotal();
+  let prod;
+
+  getProduct(getProductIDFromUrl()).then(datas => {
+    prod = datas;    
+    displayProduct(prod);
+  });  
+}
+
+
+/* POINT D'ENTREE */
+
+productRun();

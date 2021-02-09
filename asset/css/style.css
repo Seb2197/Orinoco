@@ -137,7 +137,7 @@ table {
 .clear {
   zoom: 1;
 }
-
+/* CSS perso */
 body {
   font-family: "Source Code Pro", monospace, sans-serif;
   background-color: #efd297;
@@ -252,14 +252,6 @@ a {
   color: #fff;
   background: orange;
 }
-@media screen and (max-width: 768px) {
-  .globalCard {
-    width: 100%;
-  }
-  .global {
-    flex-direction: column;
-  }
-}
 /* Fin de la section */
 /* Début du footer */
 footer {
@@ -269,4 +261,13 @@ footer {
   text-align: center;
   border-radius: 10px 10px 0 0;
   margin-top: 90px;
+}
+/* media queries */
+@media screen and (max-width: 768px) {
+  .globalCard {
+    width: 100%;
+  }
+  .global {
+    flex-direction: column;
+  }
 }
