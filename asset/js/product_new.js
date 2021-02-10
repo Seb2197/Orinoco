@@ -1,38 +1,40 @@
-// On fais une fonction pour récupérer les paramètre de l'id
+const server_apiUrl = "http://localhost:3000/api/teddies/";
+
+let localProductData;
+let UrlID;
+let amount = 0;
+
+function updateCartCounter(count) {
+  let total = 0;
+  if (localStorage.getItem("cart") != null) {
+    const items = JSON.parse(localStorage.getItem("cart"));
+
+    for (let i = 0; i < items.length; i++) {
+      total += items[i].quantity;
+    }    
+  }
+  const panierTotal = document.querySelector("#panierTotal");
+  panierTotal.textContent = total;
+}
+
 function getProductIDFromUrl() {
   const params = new URL(document.location).searchParams;
-  return params.get("id");
-}
-
-// On récupère l'id de notre api avec une verification en cas d'erreur
-async function getProduct(id) {
-  const url = "http://localhost:3000/api/teddies/" + id;  
-  const response = await fetch(url);
-  if (!response.ok) {
-    const msg = `Une erreur est survenue : ${response.status} = ${response.statusText}`;
-    throw new Error(msg);
-  }
-  let result = await response.json();    
-  return result;        
+  UrlID =  params.get("id");
 }
 
 
-// On ajoute une fonction qui permet d'avoir la valeur de la totalité des éléments dans notre product.html
-function updatePanierTotal() {
-  if (localStorage.getItem('cart') != null) {
-    const items = JSON.parse(localStorage.getItem('cart'));
-    const panierTotal = document.querySelector("#panierTotal");
-    let total = 0;
+function getDataFromServer(url, callback) {
+  fetch(url)
+    .then(async (result) => {
+      const datas = await result.json();
+      callback(datas);
+    })
     
-    for (let i=0; (i < items.length); i++) {
-      total += items[i].quantity;
-    }
-    
-    panierTotal.textContent = total;
-  }
+    .catch((error) => {
+      console.log(error);
+    });
 }
 
-// On ajoute les éléments sélectionner dans le localStorage dans un tableau et avec les quantité de chaque produit sélectionner.
 function addProductToCart(item) {
 
   let items = [];
@@ -41,19 +43,17 @@ function addProductToCart(item) {
     quantity:1,
     color: item.color
   };
- 
   
   let newItem = true;
 
   if (localStorage.getItem('cart') === null) {
     items.push(tempItem);
     localStorage.setItem('cart', JSON.stringify(items));   
-    updatePanierTotal(items.length);
+    updateCartCounter();
   } 
   else {
     items = JSON.parse(localStorage.getItem('cart'));
-    console.log(items);
-    //items.forEach((prod) => {
+    
     for (let i=0; (i < items.length); i++) {
       if (item.id === items[i]._id && item.color === items[i].color) { 
         items[i].quantity++; 
@@ -64,13 +64,10 @@ function addProductToCart(item) {
     if (newItem) { items.push(tempItem); }
     localStorage.setItem('cart', JSON.stringify(items));
   }
-
-  updatePanierTotal();
+  updateCartCounter();
 }
 
-
-function displayProduct(product) {
-  console.log("DisplayProduct");  
+function displayProduct(product) { 
   let colors = product.colors;
   let productItem = {
     _id: product._id,
@@ -81,7 +78,7 @@ function displayProduct(product) {
   let productCard = ` <div class="globalCard">
                           <img src="${product.imageUrl}" alt="Ourson">
                           <p class="global-description">Nom: ${product.name}</p>
-                          <p class="global-description">Prix: <span id="globalPrice">${product.price / 100}€</span></p>
+                          <p class="global-description">Prix: <span id="globalPrice">${product.price / 100}</span>€</p>
                           <p class="global-description">${product.description}</p>
                           <div class="globalSelect">
                           <h2 class="globalH2Select">Choisis ta couleur</h2>
@@ -89,7 +86,7 @@ function displayProduct(product) {
   for (let i = 0; (i < colors.length); i++) {
     productCard += `<option value="${colors[i]}">${colors[i]}</option>`;
   }
-  productCard += `</select><a id="BtnAdd" class="BtnAdd" href="#">Ajouter au panier</a></div></div>`;
+  productCard += `</select><a id="BtnAdd" class="selectBtn" href="#">Ajouter au panier</a></div></div>`;
 
   const productContainer = document.querySelector("#globalCard");
   productContainer.innerHTML += productCard;
@@ -97,23 +94,34 @@ function displayProduct(product) {
   const selectBtn = document.querySelector("#BtnAdd");
   selectBtn.addEventListener("click", (e) => {
     e.preventDefault();
-    let select = document.getElementById("globalColor");
+    const select = document.getElementById("globalColor");
+    const price = document.getElementById("globalPrice");
+    amount++;
+    let priceTotal = amount * (product.price / 100);
+    price.textContent = priceTotal;
     productItem.color = select.options[select.selectedIndex].value;
     addProductToCart(productItem);
   });
 }
 
-async function productRun() {    
-  updatePanierTotal();
-  let prod;
+function handleServerProductData(data) {
+  displayProduct(data);
+}
 
-  getProduct(getProductIDFromUrl()).then(datas => {
-    prod = datas;    
-    displayProduct(prod);
-  });  
+
+function getProduct() {
+  getDataFromServer(server_apiUrl + UrlID, handleServerProductData);
+}
+
+
+
+function processProduct() {  
+  getProductIDFromUrl();
+  updateCartCounter();
+  getProduct();
 }
 
 
 /* POINT D'ENTREE */
 
-productRun();
+processProduct();
