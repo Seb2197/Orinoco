@@ -49,7 +49,6 @@ function removeProduct(index) {
   let id = datas[index].id;
 
   for (let i =0; (i < datas.length); i++) {
-    console.log(id, ' = ', datas[i].id);
     if (id == datas[i].id) {
         datas.splice(i, 1);      
     }
@@ -61,9 +60,10 @@ function removeProduct(index) {
   if (!datas.length) { 
     totalProductInCart = 0;
     localStorage.clear(); 
-    document.querySelector("#btnConfirm").remove();
+    document.querySelector("#globalCount").remove();
 
   }
+  totalCommand = 0;
   compileCart(datas);
   displayCart();
   updateCartCounter();
@@ -76,7 +76,6 @@ function renderProduct(product) {
   let count = productsDatas[currentProductIndex].count;
   let totalPrice = (product.price / 100) * count;
   totalCommand += totalPrice;
-  console.log(totalCommand);
   let productCard = ` <div class="globalCard">
                           <img src="${product.imageUrl}" alt="Ourson">
                           <p class="global-description">Nom: ${product.name}</p>
@@ -87,7 +86,6 @@ function renderProduct(product) {
                           
   for (let i = 0; (i < colors.length); i++) {
     productCard += `<p class="globalH2Select">${colors[i].color} : ${colors[i].quantity}</p>`;
-    // ajour bouton pour annuler commande
   }
   productCard += `<a id="BtnRemove" data-index="${currentProductIndex}"class="btnRemove selectBtn" href="#">Supprimer ce produit</a></div>`;
   productCard += '</div>';
@@ -100,7 +98,6 @@ function renderProduct(product) {
       el.addEventListener("click", (e) => {
       e.preventDefault();
       let idx = e.target.dataset.index;
-      console.log(idx);
       removeProduct(idx);
     });
   });  
@@ -117,16 +114,6 @@ function getDatasFromCart() {
     return null;
   }
 }
-
-// function handleLocalProductData(datas) {
-//   for (let i = 0; i < datas.length; i++) {
-//     if (datas[i]._id == local_productID){
-//       localProductData = datas[i];     
-//       break;   
-//     }
-//   }
-//   renderProduct(localProductData);
-// }
 
 function handleServerProductData(data) {
   renderProduct(data);
@@ -190,7 +177,7 @@ function displayProduct(index) {
     renderProduct(datas); 
     localStorage.setItem('cartTotal', totalCommand);
     const globCount = document.querySelector('#globCount');
-    globCount.textContent = `${totalCommand}€`;    
+    globCount.textContent = `Total de votre commande: ${totalCommand}€`;    
   });
 }
 
@@ -201,9 +188,6 @@ function displayCart() {
 
 }
 
-//Récupère les valeurs de l'input dans contact__form
-//Récupère les id des produits du panier dans le tableau productsDatas
-//L'objet contact et le tableau productsDatas sont envoyé dans la function postOrder
 function submitForm() {
     let contact = {
         firstName: document.getElementById("firstName").value,
@@ -221,11 +205,7 @@ function submitForm() {
     let contactItems = JSON.stringify({contact, products});
     fillOrder(contactItems);
 }
-// =====================================================================================
 
-//Requête POST, envoi au serveur "contact" et le tableau d'id "productsDatas"
-//Enregistre l'objet "contact" et Id, le total de la commande sur le sessionStorage.
-//Envoie page "confirmation"
 function fillOrder(contactItems) {
 
     fetch(server_apiUrl + "order", {
@@ -300,7 +280,7 @@ function renderForm() {
                         <label class="form__label" for="email">Email</label>
                      </div>
                      <div class="form__group">
-                        <input type="button" class="btn-submit" id='btnSubmit' value="Validez votre commande !">
+                        <button type="submit" class="btn-submit" id='btnSubmit' value="Validez votre commande !">Validez votre commande !</button>
                      </div>
                  </form>`;                    
     divTitleForm.appendChild(titleForm);
@@ -308,8 +288,8 @@ function renderForm() {
     popupBox.appendChild(divForm);
     popupForm.appendChild(popupBox);
     document.querySelector('body').appendChild(popupForm);
-    const btnSubmit = document.querySelector("#btnSubmit");
-    btnSubmit.addEventListener("click", (e) => {
+    const formConfirm = document.querySelector("#form1");
+    formConfirm.addEventListener("submit", (e) => {
       submitForm();    
     });
 
@@ -324,6 +304,7 @@ function processCart() {
     
     const productContainer = document.querySelector("#globalCard");
     const globalCount = document.createElement("div");
+    globalCount.id = "globalCount";
     globalCount.classList.add('globalCount');
     const globCount = document.createElement('p');
     globCount.id = "globCount";
