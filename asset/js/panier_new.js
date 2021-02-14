@@ -32,7 +32,7 @@ function getDataFromServer(url, callback) {
       console.log(error);
     });
 }
-
+// On retourne un message d'erreur si jamais il n'a pas réussi à trouver l'élément
 async function getProductApi(id) {
   const url = "http://localhost:3000/api/teddies/" + id;  
   const response = await fetch(url);
@@ -43,7 +43,7 @@ async function getProductApi(id) {
   let result = await response.json();    
   return result;        
 }
-
+// On supprime les éléments du localStorage
 function removeProduct(index) {
   let datas = JSON.parse(getDatasFromCart()); 
   let id = datas[index].id;
@@ -69,7 +69,7 @@ function removeProduct(index) {
   updateCartCounter();
 }
 
-
+//On créez la carte et on créez le btn delette
 function renderProduct(product) { 
   
   let colors = productsDatas[currentProductIndex].details;
@@ -106,7 +106,6 @@ function renderProduct(product) {
 function getDatasFromCart() {
   if (totalProductInCart > 0) {
     const datas =  localStorage.getItem('cart');
-    //console.log(datas);
     return datas;
 
   }
@@ -137,6 +136,7 @@ function findProductIndex(id) {
   return result;
 }
 
+// On récupère les éléments et les ajoute dans un tableau
 function compileCart(datas) {
 
   productsDatas = [];
@@ -171,6 +171,7 @@ function compileCart(datas) {
   }
 }
 
+// Prix total de la commande
 function displayProduct(index) {  
     getProductApi(productsDatas[index].id).then((datas) => {
     currentProductIndex = index;    
@@ -188,6 +189,7 @@ function displayCart() {
 
 }
 
+// Récupération des valeurs du formulaire
 function submitForm() {
     let contact = {
         firstName: document.getElementById("firstName").value,
@@ -206,6 +208,7 @@ function submitForm() {
     fillOrder(contactItems);
 }
 
+//Renvoie les données du formulaire
 function fillOrder(contactItems) {
 
     fetch(server_apiUrl + "order", {
@@ -231,6 +234,8 @@ function fillOrder(contactItems) {
     })
 }
 
+
+// Formulaire
 function renderForm() {
     const divTitleForm = document.createElement('div');
     divTitleForm.id = "divTitleForm";

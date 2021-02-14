@@ -1,9 +1,12 @@
+// ON fais appel à l'api et on la garde dans une variable
 const server_apiUrl = "http://localhost:3000/api/teddies/";
 
+// On créez des variables
 let localProductData;
 let UrlID;
 let amount = 0;
 
+// On créez une function pour le nbr d'élement sur nos différents pages
 function updateCartCounter(count) {
   let total = 0;
   if (localStorage.getItem("cart") != null) {
@@ -17,12 +20,13 @@ function updateCartCounter(count) {
   panierTotal.textContent = total;
 }
 
+// On cherche les éléments par leur id
 function getProductIDFromUrl() {
   const params = new URL(document.location).searchParams;
   UrlID =  params.get("id");
 }
 
-
+// On transforme nos données en json
 function getDataFromServer(url, callback) {
   fetch(url)
     .then(async (result) => {
@@ -35,6 +39,7 @@ function getDataFromServer(url, callback) {
     });
 }
 
+// On créez un tableau pour récupérer leur id, quantity et leur color
 function addProductToCart(item) {
 
   let items = [];
@@ -46,6 +51,7 @@ function addProductToCart(item) {
   
   let newItem = true;
 
+  // On push le résultat si il y est sinon on ne return rien
   if (localStorage.getItem('cart') === null) {
     items.push(tempItem);
     localStorage.setItem('cart', JSON.stringify(items));   
@@ -67,6 +73,7 @@ function addProductToCart(item) {
   updateCartCounter();
 }
 
+// On créez une function pour récupérer les données et les faire apparaître dans notre html
 function displayProduct(product) { 
   let colors = product.colors;
   let productItem = {
@@ -90,7 +97,7 @@ function displayProduct(product) {
 
   const productContainer = document.querySelector("#globalCard");
   productContainer.innerHTML += productCard;
-
+// On change le prix et et récupere la valeur des couleurs
   const selectBtn = document.querySelector("#BtnAdd");
   selectBtn.addEventListener("click", (e) => {
     e.preventDefault();
@@ -104,6 +111,7 @@ function displayProduct(product) {
   });
 }
 
+//On ferme les functions utilisé plus haut
 function handleServerProductData(data) {
   displayProduct(data);
 }

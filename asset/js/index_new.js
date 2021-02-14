@@ -1,6 +1,7 @@
 // On va récupérer l'api
 const server_apiUrl = "http://localhost:3000/api/teddies";
 
+//On retourn le résultat en json
 function getDataFromServer(url, callback) {
   fetch(url)
     .then(async (result) => {
@@ -30,7 +31,7 @@ function displayProductCard(product) {
                         </a>
                         </div>`;
 }
-
+// On ajoute tous éléments qu'on trouve dans l'api
 function updateCartCounter() {
   let total = 0;
   if (localStorage.getItem("cart") != null) {
@@ -44,7 +45,7 @@ function updateCartCounter() {
   panierTotal.textContent = total;
 }
 
-
+//On ferme les functions
 function updateUI(datas) {
   datas.forEach((product) => {
       displayProductCard(product);
