@@ -211,7 +211,7 @@ function submitForm() {
 //Renvoie les données du formulaire
 function fillOrder(contactItems) {
 
-    fetch(server_apiUrl + "order", {
+  fetch(server_apiUrl + "order", { mode: 'cors' }, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json'
