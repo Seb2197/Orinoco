@@ -1,4 +1,4 @@
-const server_apiUrl = "https://backendp5.herokuapp.com/api/teddies";
+const server_apiUrl = "https://backendp5.herokuapp.com/api/teddies/";
 
 let totalProductInCart = 0;
 let productsDatas = [];
