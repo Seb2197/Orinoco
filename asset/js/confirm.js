@@ -10,7 +10,7 @@ const total = document.createElement('p');
 thanks.textContent = "MERCI D'AVOIR COMMANDER NOS OURS EN PELUCHE. NOUS ESPERONS QU'ILS VOUS FERONT DE GROS CALINS !"
 details.textContent = "Voici les details de votre commande :"
 window.onload = function () {
-    $.getJSON("main.json", function () {
+    getJSON("main.json", function () {
         contact.textContent = "Au nom : " + datas.firstName + " " + datas.lastName;
         adresse.textContent = "Adresse de livraison : " + datas.address + " Ville : " + datas.city;
         orderID.textContent = "Numéro de référence : " + localStorage.getItem("orderID");
