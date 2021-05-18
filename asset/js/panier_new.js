@@ -216,15 +216,10 @@ function fillOrder(contactItems) {
         headers: {
             'Content-Type': 'application/json'
         },
-        //mode:'cors',
         body: contactItems
-    }).then(response => {
-
-        return response.json();
-
-    }).then( r => {
-        localStorage.setItem('contact', JSON.stringify(r.contact));
-        localStorage.setItem('orderID', JSON.stringify(r.orderId));
+    }).then( response => {
+        localStorage.setItem('contact', JSON.stringify(response.contact));
+        localStorage.setItem('orderID', JSON.stringify(response.orderId));
         
         localStorage.removeItem('cart');
         window.location.replace("./confirm.html");
