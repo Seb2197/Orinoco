@@ -1,5 +1,5 @@
 // ON fais appel à l'api et on la garde dans une variable
-const server_apiUrl = "http://localhost:3000/api/teddies/";
+const server_apiUrl = "https://backendp5.herokuapp.com/api/teddies";
 
 // On créez des variables
 let localProductData;

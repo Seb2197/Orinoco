@@ -1,5 +1,5 @@
 // On va récupérer l'api
-const server_apiUrl = "http://localhost:3000/api/teddies";
+const server_apiUrl = "https://backendp5.herokuapp.com/api/teddies";
 
 //On retourn le résultat en json
 function getDataFromServer(url, callback) {

@@ -1,4 +1,4 @@
-const server_apiUrl = "http://localhost:3000/api/teddies/";
+const server_apiUrl = "https://backendp5.herokuapp.com/api/teddies";
 
 let totalProductInCart = 0;
 let productsDatas = [];
@@ -34,7 +34,7 @@ function getDataFromServer(url, callback) {
 }
 // On retourne un message d'erreur si jamais il n'a pas réussi à trouver l'élément
 async function getProductApi(id) {
-  const url = "http://localhost:3000/api/teddies/" + id;  
+  const url = "https://backendp5.herokuapp.com/api/teddies/" + id;
   const response = await fetch(url);
   if (!response.ok) {
     const msg = `Une erreur est survenue : ${response.status} = ${response.statusText}`;
